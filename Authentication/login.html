@@ -71,7 +71,10 @@
     })
     .then(res => res.text())
     .then(response => {
-      alert("Response: " + response); // Show response from server
+      if (response != "Error") {
+        
+      }
+      
     })
     .catch(err => {
       console.error("Error:", err);
