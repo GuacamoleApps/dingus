@@ -76,7 +76,7 @@
     .then(res => res.text())
     .then(response => {
       if (response != "User already exists") {
-        erroorlab.innerText = response
+        erroorlab.innerHTML = response
       } else {
         erroorlab.innerText("An error Occured while creating account.")
       }
