@@ -59,7 +59,7 @@
 
 <script>
   // Change this URL to update the form action easily
-  const postUrl = "https://script.google.com/macros/s/AKfycbynDfzwEe57YHJBqLZGWgg5NioxEBQm-cyoCwZWF84DMPelzf3WDaLud_5AduUC0uC5Nw/exec";
+  const postUrl = "https://script.google.com/macros/s/AKfycbwYZ5vW3etGCuj7dxDQV9drxblyGTYurYVVAT65ohbLqzGpeWtnagbLyZahtT2F7Aw6QA/exec";
   const erroorlab = document.getElementById("error_label")
   function setCookie(name, value) {
     document.cookie = name+"="+value
@@ -71,16 +71,21 @@
 
     fetch(postUrl, {
       method: "POST",
-      body: formData
+      body: formData,
+      mode: "no-cors"
     })
     .then(res => res.text())
     .then(response => {
-      if (response != "Error") {
-        var cookieToken = JSON.parse(response)
-        setCookie("_28Adm", cookieToken.token)
-      } else {
-        erroorlab.innerText = response
-      }
+        try {
+            if (response != "Error") {
+                var cookieToken = JSON.parse(response)
+                setCookie("_28Adm", cookieToken.token)
+            } else {
+                erroorlab.innerText = response
+            }
+        } catch (e) {
+            erroorlab.innerText = response
+        }
       
     })
     .catch(err => {
