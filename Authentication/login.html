@@ -71,8 +71,7 @@
 
     fetch(postUrl, {
       method: "POST",
-      body: formData,
-      mode: "no-cors"
+      body: formData
     })
     .then(res => res.text())
     .then(response => {
