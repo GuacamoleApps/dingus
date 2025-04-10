@@ -43,6 +43,11 @@
     button:hover {
       background: #0056b3;
     }
+    #error_label {
+      color: red;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -54,20 +59,25 @@
     <input type="password" name="password" placeholder="Password" required />
     <button type="submit">Login</button>
   </form>
-  <p for="loginForm" id="error_label"></p>
+  <p id="error_label"></p>
 </div>
 
 <script>
-  // Change this URL to update the form action easily
+  // Easily change the backend URL here
   const postUrl = "https://script.google.com/macros/s/AKfycbzMLW9x65JkBBZOaTtsoX_CTCMLDo0ch73MpFX5ig9lxDZ1DZLgHFA_Ix4wyalA02tijw/exec";
-  const erroorlab = document.getElementById("error_label")
-  function setCookie(name, value) {
-    document.cookie = name+"="+value
-  }
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent normal form submission
+  const errorLabel = document.getElementById("error_label");
 
-    const formData = new FormData(this);
+  function setCookie(name, value) {
+    document.cookie = `${name}=${value}; path=/;`;
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const form = new FormData(this);
+    const formData = new URLSearchParams();
+    formData.append("username", form.get("username"));
+    formData.append("password", form.get("password"));
 
     fetch(postUrl, {
       method: "POST",
@@ -75,21 +85,26 @@
     })
     .then(res => res.text())
     .then(response => {
-        try {
-            if (response != "Error") {
-                var cookieToken = JSON.parse(response)
-                setCookie("_28Adm", cookieToken.token)
-            } else {
-                erroorlab.innerText = response
-            }
-        } catch (e) {
-            erroorlab.innerText = response
+      try {
+        const data = JSON.parse(response);
+        if (data.token) {
+          setCookie("_28Adm", data.token);
+          errorLabel.style.color = "green";
+          errorLabel.innerText = "Login successful!";
+          // Optional: redirect or something
+        } else {
+          errorLabel.style.color = "red";
+          errorLabel.innerText = data.error || "Login failed.";
         }
-      
+      } catch (e) {
+        errorLabel.style.color = "red";
+        errorLabel.innerText = "Invalid server response.";
+      }
     })
     .catch(err => {
-      console.error("Error:", err);
-      alert("An error occurred");
+      console.error("Fetch error:", err);
+      errorLabel.style.color = "red";
+      errorLabel.innerText = "Network error. Please try again.";
     });
   });
 </script>
