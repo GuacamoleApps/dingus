@@ -64,49 +64,36 @@
 
 <script>
   // Easily change the backend URL here
-  const postUrl = "https://script.google.com/macros/s/AKfycbzMLW9x65JkBBZOaTtsoX_CTCMLDo0ch73MpFX5ig9lxDZ1DZLgHFA_Ix4wyalA02tijw/exec";
+  const postUrl = "https://script.google.com/macros/s/AKfycbzMcKg8B2Kt19pvCwq8rYBCMpWrVs1HvF73jowkb3kQLPyTRT-MmD-05TgtgNZhq0l0/exec";
   const errorLabel = document.getElementById("error_label");
 
   function setCookie(name, value) {
     document.cookie = `${name}=${value}; path=/;`;
   }
 
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent default form submission
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const formData = new FormData(this);
 
-    const form = new FormData(this);
-    const formData = new URLSearchParams();
-    formData.append("username", form.get("username"));
-    formData.append("password", form.get("password"));
-
-    fetch(postUrl, {
-      method: "POST",
-      body: formData
-    })
-    .then(res => res.text())
-    .then(response => {
-      try {
-        const data = JSON.parse(response);
-        if (data.token) {
-          setCookie("_28Adm", data.token);
-          errorLabel.style.color = "green";
-          errorLabel.innerText = "Login successful!";
-          // Optional: redirect or something
-        } else {
-          errorLabel.style.color = "red";
-          errorLabel.innerText = data.error || "Login failed.";
-        }
-      } catch (e) {
-        errorLabel.style.color = "red";
-        errorLabel.innerText = "Invalid server response.";
+  fetch(postUrl, {
+    method: "POST",
+    body: formData
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.token) {
+        document.cookie = "_28Adm=" + data.token;
+        alert("Login successful!");
+      } else {
+        document.getElementById("error_label").innerText = data.error || "Login failed.";
       }
     })
     .catch(err => {
-      console.error("Fetch error:", err);
-      errorLabel.style.color = "red";
-      errorLabel.innerText = "Network error. Please try again.";
+      console.error("Error:", err);
+      alert("An error occurred while logging in.");
     });
-  });
+});
+
 </script>
 
 </body>
