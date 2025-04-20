@@ -24,6 +24,7 @@ fetch(GAS_URL, options)
 
       card.appendChild(subject);
       card.appendChild(content);
+      card.appendChild(dinger);
       container.appendChild(card);
     });
 
