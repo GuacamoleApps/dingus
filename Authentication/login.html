@@ -90,6 +90,7 @@
     })
     .catch(err => {
       console.error("Error:", err);
+      errorLabel.innerHTML = err;
       alert("An error occurred while logging in.");
     });
 });
