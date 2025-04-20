@@ -23,8 +23,8 @@ fetch(GAS_URL, options)
       content.textContent = item.data;
 
       card.appendChild(subject);
-      card.appendChild(content);
       card.appendChild(dinger);
+      card.appendChild(content);
       container.appendChild(card);
     });
 
