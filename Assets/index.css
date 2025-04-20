@@ -3,7 +3,34 @@ body {
     color: ghostwhite;
 }
 
-.DingPostBox {
-    background-color: #2c2c2c;
-    color: ghostwhite;
-}
+
+.dingus-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .dingus-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .dingus-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .dingus-card h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: #333;
+  }
+
+  .dingus-card p {
+    margin: 0;
+    color: #666;
+  }

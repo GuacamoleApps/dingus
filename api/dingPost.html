@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>dingus - ding</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <h2>Send ding</h2>
+  <form id="loginForm">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="text" name="DingSubject" placeholder="Ding Title" required />
+    <input type="text" name="DingData" placeholder="Ding body" required />
+    <input type="text" name="authToken" id="authToken" hidden/>
+    <button type="submit">Post</button>
+  </form>
+  <p for="loginForm" id="error_label"></p>
+</div>
+
+<script>
+  function getCookie(name) {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        return cookie.substring(name.length + 1);
+      } 
+    }
+    return null;
+  } 
+  // Change this URL to update the form action easily
+  const postUrl = "https://dingusproxy.barstaxjolster.workers.dev/dings/post"
+  const erroorlab = document.getElementById("error_label")
+  var authToken = document.getElementById("authToken")
+  authToken.value = getCookie("_28Adm")
+  function setCookie(name, value) {
+    document.cookie = name+"="+value+";"
+  }
+  document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent normal form submission
+
+    const formData = new FormData(this);
+
+    fetch(postUrl, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.text())
+    .then(response => {
+      if (response.toString().includes("Unknown Error Occured")) {
+        erroorlab.innerText = "Error: "+response
+      } else {
+        erroorlab.innerText = "Posted the ding!"
+      }
+      
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      alert("An error occurred");
+    });
+  });
+</script>
+
+</body>
+</html>
