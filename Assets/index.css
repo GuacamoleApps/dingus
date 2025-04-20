@@ -29,6 +29,11 @@ body {
     font-size: 1.25rem;
     color: #333;
   }
+  .dingus-card h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 15px;
+    color: #ff0000;
+  }
 
   .dingus-card p {
     margin: 0;

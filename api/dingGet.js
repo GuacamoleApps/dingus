@@ -16,6 +16,8 @@ fetch(GAS_URL, options)
 
       const subject = document.createElement('h2');
       subject.textContent = item.subject;
+      const dinger = document.createElement('h1');
+      dinger.textContent = item.dinger;
 
       const content = document.createElement('p');
       content.textContent = item.data;
