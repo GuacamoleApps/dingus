@@ -1,7 +1,10 @@
 // Replace this with your GAS web app URL
 const GAS_URL = "https://dingusproxy.barstaxjolster.workers.dev/dings/get";
+const options = {
+    method: "POST"
+}
 
-fetch(GAS_URL)
+fetch(GAS_URL, options)
   .then(response => response.json())
   .then(data => {
     const container = document.createElement('div');
