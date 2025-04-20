@@ -20,10 +20,12 @@ fetch(GAS_URL, options)
       dinger.textContent = item.dinger;
 
       const content = document.createElement('p');
+      const divider = document.createElement('hr');
       content.textContent = item.data;
-
+      divider.className = "solid"
       card.appendChild(subject);
       card.appendChild(dinger);
+      card.appendChild(divider);
       card.appendChild(content);
       container.appendChild(card);
     });

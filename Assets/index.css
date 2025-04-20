@@ -23,7 +23,10 @@ body {
   .dingus-card:hover {
     transform: translateY(-5px);
   }
-
+/* Solid border */
+hr.solid {
+    border-top: 3px solid #bbb;
+  }
   .dingus-card h2 {
     margin: 0 0 0.5rem 0;
     font-size: 1.25rem;
