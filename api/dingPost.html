@@ -50,7 +50,7 @@
 <div class="login-box">
   <h2>Send ding</h2>
   <form id="loginForm">
-    <input type="text" name="username" placeholder="Username" required />
+    <input type="text" name="username" placeholder="Username" id="username" hidden />
     <input type="text" name="DingSubject" placeholder="Ding Title" required />
     <input type="text" name="DingData" placeholder="Ding body" required />
     <input type="text" name="authToken" id="authToken" hidden/>
@@ -75,7 +75,9 @@
   const postUrl = "https://dingusproxy.barstaxjolster.workers.dev/dings/post"
   const erroorlab = document.getElementById("error_label")
   var authToken = document.getElementById("authToken")
+  var usernme2 = document.getElementById("username")
   authToken.value = getCookie("_28Adm")
+  usernme2.value = getCookie("username")
   function setCookie(name, value) {
     document.cookie = name+"="+value+";"
   }
