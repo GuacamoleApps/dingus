@@ -21,7 +21,7 @@ fetch(GAS_URL, options)
 
       const content = document.createElement('p');
       const divider = document.createElement('hr');
-      content.textContent = item.data;
+      content.innerHTML = item.data;
       divider.className = "solid"
       card.appendChild(subject);
       card.appendChild(dinger);
