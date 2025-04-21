@@ -85,7 +85,8 @@
       if (data.token) {
         document.cookie = "_28Adm=" + data.token+"; path=/";
         document.cookie = "username=" + usernamei.value+"; path=/";
-        alert("Login successful!");
+        errorLabel.innerHTML = "Success"
+        window.location.replace("https://guacamoleapps.github.io/dingus/")
       } else {
         document.getElementById("error_label").innerText = data.error || "Login failed.";
       }
