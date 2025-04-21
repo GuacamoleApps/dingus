@@ -1,0 +1,9 @@
+{
+    "name": "Dingus",
+    "short_name": "Ding",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4a90e2"
+  }
+  
