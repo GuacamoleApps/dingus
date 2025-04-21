@@ -40,7 +40,7 @@ async function dingusFetch(endpoint, body = {}, method = "POST") {
     }
   }
 }
-
+window.dingusFetch = dingusFetch;
 // Example usage
 // dingusFetch("/login", { username: "dinguser", password: "dingpass" })
 //   .then(data => console.log("Login success:", data))

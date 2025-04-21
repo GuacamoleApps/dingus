@@ -43,63 +43,72 @@
     button:hover {
       background: #0056b3;
     }
+    #error_label {
+      color: red;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
 
 <div class="login-box">
   <h2>Send ding</h2>
-  <form id="loginForm">
-    <input type="text" name="username" placeholder="Username" id="username" hidden />
+  <form id="postForm">
+    <input type="text" name="username" id="username" hidden />
     <input type="text" name="DingSubject" placeholder="Ding Title" required />
     <input type="text" name="DingData" placeholder="Ding body" required />
-    <input type="text" name="authToken" id="authToken" hidden/>
+    <input type="text" name="authToken" id="authToken" hidden />
     <button type="submit">Post</button>
   </form>
-  <p for="loginForm" id="error_label"></p>
+  <p id="error_label"></p>
 </div>
+
 <script src="/dingus/api/dingus-api.js"></script>
 <script>
+  const errorLabel = document.getElementById("error_label");
+  const authTokenField = document.getElementById("authToken");
+  const usernameField = document.getElementById("username");
+
   function getCookie(name) {
-    const cookieString = document.cookie;
-    const cookies = cookieString.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.startsWith(name + '=')) {
-        return cookie.substring(name.length + 1);
-      } 
-    }
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
-  } 
-  // Change this URL to update the form action easily
-  const postUrl = "https://dingusproxy.barstaxjolster.workers.dev/dings/post"
-  const erroorlab = document.getElementById("error_label")
-  var authToken = document.getElementById("authToken")
-  var usernme2 = document.getElementById("username")
-  authToken.value = getCookie("_28Adm")
-  usernme2.value = getCookie("username")
-  function setCookie(name, value) {
-    document.cookie = name+"="+value+";"
   }
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent normal form submission
 
-    const formData = new FormData(this);
+  authTokenField.value = getCookie("_28Adm") || "";
+  usernameField.value = getCookie("username") || "";
 
-    dingusFetch("/dings/post", formData)
-    .then(res => res.text())
-    .then(response => {
-      if (response.toString().includes("Unknown Error Occured") || response == "Auth.Error") {
-        erroorlab.innerText = "Error: "+response
+  document.getElementById("postForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const formData = {
+      username: usernameField.value,
+      DingSubject: this.DingSubject.value,
+      DingData: this.DingData.value,
+      authToken: authTokenField.value
+    };
+
+    try {
+      const response = await dingusFetch("/dings/post", formData);
+
+      if (typeof response === "string") {
+        if (response.includes("Unknown Error Occured") || response === "Auth.Error") {
+          errorLabel.innerText = "Error: " + response;
+        } else {
+          errorLabel.innerText = "Posted the ding!";
+        }
+      } else if (response.success) {
+        errorLabel.innerText = "Ding posted successfully!";
       } else {
-        erroorlab.innerText = "Posted the ding!"
+        errorLabel.innerText = response.error || "Failed to post ding.";
       }
-      
-    })
-    .catch(err => {
-      console.error("Error:", err);
-      alert("An error occurred");
-    });
+
+    } catch (err) {
+      console.error("Post error:", err);
+      errorLabel.innerText = "An error occurred while posting.";
+    }
   });
 </script>
 

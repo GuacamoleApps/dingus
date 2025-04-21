@@ -56,45 +56,43 @@
   <h2>Login</h2>
   <form id="loginForm">
     <input type="text" name="username" id="username" placeholder="Username" required />
-    <input type="password" name="password" placeholder="Password" required />
+    <input type="password" name="password" id="password" placeholder="Password" required />
     <button type="submit">Login</button>
   </form>
   <p id="error_label"></p>
 </div>
+
+<!-- Make sure this script defines window.dingusFetch -->
 <script src="/dingus/api/dingus-api.js"></script>
+
 <script>
-  // Easily change the backend URL here
-  const postUrl = "https://dingusproxy.barstaxjolster.workers.dev/login"
   const errorLabel = document.getElementById("error_label");
-  const usernamei = document.getElementById("username")
+  const usernameInput = document.getElementById("username");
 
-  function setCookie(name, value) {
-    document.cookie = `${name}=${value}; path=/;`;
-  }
+  document.getElementById("loginForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-  document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const formData = new FormData(this);
+    const formData = {
+      username: usernameInput.value,
+      password: document.getElementById("password").value
+    };
 
-   dingusFetch("/login", formData)
-    .then(res => res.json())
-    .then(data => {
+    try {
+      const data = await dingusFetch("/login", formData);
+
       if (data.token) {
-        document.cookie = "_28Adm=" + data.token+"; path=/";
-        document.cookie = "username=" + usernamei.value+"; path=/";
-        errorLabel.innerHTML = "Success"
-        window.location.replace("https://guacamoleapps.github.io/dingus/")
+        document.cookie = "_28Adm=" + data.token + "; path=/";
+        document.cookie = "username=" + usernameInput.value + "; path=/";
+        errorLabel.innerText = "Success!";
+        window.location.replace("https://guacamoleapps.github.io/dingus/");
       } else {
-        document.getElementById("error_label").innerText = data.error || "Login failed.";
+        errorLabel.innerText = data.error || "Login failed.";
       }
-    })
-    .catch(err => {
-      console.error("Error:", err);
-      errorLabel.innerHTML = err;
-      alert("An error occurred while logging in.");
-    });
-});
-
+    } catch (err) {
+      console.error("Login Error:", err);
+      errorLabel.innerText = "An error occurred during login.";
+    }
+  });
 </script>
 
 </body>

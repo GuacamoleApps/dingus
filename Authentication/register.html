@@ -43,6 +43,11 @@
     button:hover {
       background: #0056b3;
     }
+    #error_label {
+      color: red;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -50,39 +55,47 @@
 <div class="login-box">
   <h2>Register Account</h2>
   <form id="loginForm">
-    <input type="text" name="username" placeholder="Username" required />
-    <input type="password" name="password" placeholder="Password" required />
+    <input type="text" name="username" id="username" placeholder="Username" required />
+    <input type="password" name="password" id="password" placeholder="Password" required />
     <button type="submit">Register</button>
   </form>
-  <p for="loginForm" id="error_label"></p>
+  <p id="error_label"></p>
 </div>
+
 <script src="/dingus/api/dingus-api.js"></script>
 <script>
-  // Change this URL to update the form action easily
-  const postUrl = "https://dingusproxy.barstaxjolster.workers.dev/register"
-  const erroorlab = document.getElementById("error_label")
-  function setCookie(name, value) {
-    document.cookie = name+"="+value+";"
-  }
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent normal form submission
+  const errorLabel = document.getElementById("error_label");
 
-    const formData = new FormData(this);
+  document.getElementById("loginForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-    dingusFetch("/register", formData)
-    .then(res => res.text())
-    .then(response => {
-      if (response != "User already exists") {
-        erroorlab.innerHTML = response
+    const formData = {
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value
+    };
+
+    try {
+      const response = await dingusFetch("/register", formData);
+
+      if (typeof response === "string") {
+        if (response === "User already exists") {
+          errorLabel.innerText = "An error occurred: User already exists.";
+        } else {
+          errorLabel.innerText = response;
+        }
+      } else if (response.success) {
+        errorLabel.innerText = "Account created!";
+        setTimeout(() => {
+          window.location.replace("/login.html"); // Redirect to login page
+        }, 1500);
       } else {
-        erroorlab.innerText("An error Occured while creating account.")
+        errorLabel.innerText = response.error || "Unknown error during registration.";
       }
-      
-    })
-    .catch(err => {
-      console.error("Error:", err);
-      alert("An error occurred");
-    });
+
+    } catch (err) {
+      console.error("Register Error:", err);
+      errorLabel.innerText = "An error occurred while creating the account.";
+    }
   });
 </script>
 
