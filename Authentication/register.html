@@ -77,16 +77,19 @@
     try {
       const response = await dingusFetch("/register", formData);
 
+      // Check if response is a string (e.g., error message)
       if (typeof response === "string") {
         if (response === "User already exists") {
           errorLabel.innerText = "An error occurred: User already exists.";
         } else {
           errorLabel.innerText = response;
         }
-      } else if (response.success) {
+      } 
+      // Check if response is an object with a 'success' property
+      else if (response.success) {
         errorLabel.innerText = "Account created!";
         setTimeout(() => {
-          window.location.replace("/login.html"); // Redirect to login page
+          window.location.replace("/login.html"); // Redirect to login page after a delay
         }, 1500);
       } else {
         errorLabel.innerText = response.error || "Unknown error during registration.";

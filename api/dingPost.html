@@ -93,6 +93,7 @@
     try {
       const response = await dingusFetch("/dings/post", formData);
 
+      // Handle different types of responses
       if (typeof response === "string") {
         if (response.includes("Unknown Error Occured") || response === "Auth.Error") {
           errorLabel.innerText = "Error: " + response;
