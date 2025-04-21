@@ -1,6 +1,15 @@
 const CLOUD_FLARE_URL = "https://dingusproxy.barstaxjolster.workers.dev";
 const VERCEL_FALLBACK_URL = "https://vercel-dingus-proxy.vercel.app";
 
+async function parseResponse(response) {
+  const text = await response.text();
+  try {
+    return JSON.parse(text); // Try to parse as JSON
+  } catch {
+    return { message: text }; // Fallback to text wrapped in an object
+  }
+}
+
 async function dingusFetch(endpoint, body = {}, method = "POST") {
   const headers = { "Content-Type": "application/x-www-form-urlencoded" };
   const payload = new URLSearchParams(body);
@@ -15,7 +24,7 @@ async function dingusFetch(endpoint, body = {}, method = "POST") {
 
     if (!cloudflareResponse.ok) throw new Error("Cloudflare failed");
 
-    const data = await cloudflareResponse.json();
+    const data = await parseResponse(cloudflareResponse);
     console.log("✅ Using Cloudflare");
     return data;
   } catch (err) {
@@ -31,7 +40,7 @@ async function dingusFetch(endpoint, body = {}, method = "POST") {
 
       if (!vercelResponse.ok) throw new Error("Vercel also failed");
 
-      const data = await vercelResponse.json();
+      const data = await parseResponse(vercelResponse);
       console.log("✅ Using Vercel fallback");
       return data;
     } catch (vercelErr) {
@@ -40,8 +49,5 @@ async function dingusFetch(endpoint, body = {}, method = "POST") {
     }
   }
 }
+
 window.dingusFetch = dingusFetch;
-// Example usage
-// dingusFetch("/login", { username: "dinguser", password: "dingpass" })
-//   .then(data => console.log("Login success:", data))
-//   .catch(err => console.error("Login failed:", err));
