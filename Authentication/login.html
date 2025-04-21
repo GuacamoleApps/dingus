@@ -83,8 +83,8 @@
     .then(res => res.json())
     .then(data => {
       if (data.token) {
-        document.cookie = "_28Adm=" + data.token;
-        document.cookie = "username=" + usernamei.value;
+        document.cookie = "_28Adm=" + data.token+"; path=/";
+        document.cookie = "username=" + usernamei.value+"; path=/";
         alert("Login successful!");
       } else {
         document.getElementById("error_label").innerText = data.error || "Login failed.";
