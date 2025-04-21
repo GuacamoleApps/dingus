@@ -61,7 +61,7 @@
   </form>
   <p id="error_label"></p>
 </div>
-
+<script src="/dingus/api/dingus-api.js"></script>
 <script>
   // Easily change the backend URL here
   const postUrl = "https://dingusproxy.barstaxjolster.workers.dev/login"
@@ -76,10 +76,7 @@
   e.preventDefault();
   const formData = new FormData(this);
 
-  fetch(postUrl, {
-    method: "POST",
-    body: formData
-  })
+   dingusFetch("/login", formData)
     .then(res => res.json())
     .then(data => {
       if (data.token) {
