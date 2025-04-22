@@ -4,12 +4,6 @@ const options = {
     method: "POST"
 }
 
-async function init() {
-  for (let i = 0; i < 999999999999999999999999999999; i++) {
-    await setInterval(doTheLoop, 500)
-  }
-}
-
 function doTheLoop() {
   fetch(GAS_URL, options)
   .then(response => response.json())
@@ -45,4 +39,4 @@ function doTheLoop() {
   
 }
 
-init()
+doTheLoop()
