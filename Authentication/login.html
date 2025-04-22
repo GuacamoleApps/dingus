@@ -80,17 +80,18 @@
     try {
       const data = await dingusFetch("/login", formData);
 
-      if (data.token) {
+      if (data.message === "Auth.Error") {
+        errorLabel.innerText = data.error || "Login failed.";
+      } else {
         document.cookie = "_28Adm=" + data.token + "; path=/";
         document.cookie = "username=" + usernameInput.value + "; path=/";
         errorLabel.innerText = "Success!";
         window.location.replace("https://guacamoleapps.github.io/dingus/");
-      } else {
         errorLabel.innerText = data.error || "Login failed.";
       }
     } catch (err) {
       console.error("Login Error:", err);
-      errorLabel.innerText = "An error occurred during login.";
+      errorLabel.innerText = "An error occurred during login.";    
     }
   });
 </script>

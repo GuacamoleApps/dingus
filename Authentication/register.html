@@ -89,7 +89,7 @@
       else if (response.message === "Success! go sign in here: <a href='https://guacamoleapps.github.io/dingus/'>Login</a>") {
         errorLabel.innerText = "Account created!";
         setTimeout(() => {
-          window.location.replace("/login.html"); // Redirect to login page after a delay
+          window.location.replace("./login.html"); // Redirect to login page after a delay
         }, 1500);
       } else {
         errorLabel.innerText = response.error || "Unknown error during registration.";
