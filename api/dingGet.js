@@ -4,7 +4,14 @@ const options = {
     method: "POST"
 }
 
-fetch(GAS_URL, options)
+async function init() {
+  for (let i = 0; i < 999999999999999999999999999999; i++) {
+    await setInterval(doTheLoop, 500)
+  }
+}
+
+function doTheLoop() {
+  fetch(GAS_URL, options)
   .then(response => response.json())
   .then(data => {
     const container = document.createElement('div');
@@ -35,3 +42,5 @@ fetch(GAS_URL, options)
   .catch(error => {
     console.error("Error fetching data:", error);
   });
+  
+}
