@@ -100,7 +100,7 @@
         } else {
           errorLabel.innerText = "Posted the ding!";
         }
-      } else if (response.success) {
+      } else if (response.message === "Message.Output.Posted.24hr") {
         errorLabel.innerText = "Ding posted successfully!";
       } else {
         errorLabel.innerText = response.error || "Failed to post ding.";
