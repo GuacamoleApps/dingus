@@ -86,7 +86,7 @@
         }
       } 
       // Check if response is an object with a 'success' property
-      else if (response.success) {
+      else if (response.message === "Success! go sign in here: <a href='https://guacamoleapps.github.io/dingus/'>Login</a>") {
         errorLabel.innerText = "Account created!";
         setTimeout(() => {
           window.location.replace("/login.html"); // Redirect to login page after a delay
