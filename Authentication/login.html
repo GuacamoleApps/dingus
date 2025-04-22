@@ -80,7 +80,7 @@
     try {
       const data = await dingusFetch("/login", formData);
 
-      if (data.message === "Auth.Error") {
+      if (data.message === "Auth.Error" || data.message === "Incorrect password") {
         errorLabel.innerText = data.error || "Login failed.";
       } else {
         document.cookie = "_28Adm=" + data.token + "; path=/";
