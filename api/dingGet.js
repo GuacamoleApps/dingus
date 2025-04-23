@@ -1,42 +1,64 @@
-// Replace this with your GAS web app URL
 const GAS_URL = "https://dingus-api.vercel.app/dings/get";
-const options = {
-    method: "POST"
+const options = { method: "POST" };
+
+let lastDataHash = ""; // We'll use this to detect changes
+
+function hashData(data) {
+  return JSON.stringify(data); // Simple hash using stringified data
 }
 
-function doTheLoop() {
-  fetch(GAS_URL, options)
-  .then(response => response.json())
-  .then(data => {
-    const container = document.createElement('div');
-    container.className = 'dingus-container';
+function updateDingusCards(data) {
+  // Clear previous content
+  const oldContainer = document.querySelector('.dingus-container');
+  if (oldContainer) oldContainer.remove();
 
-    data.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'dingus-card';
+  const container = document.createElement('div');
+  container.className = 'dingus-container';
 
-      const subject = document.createElement('h2');
-      subject.textContent = item.subject;
-      const dinger = document.createElement('h1');
-      dinger.textContent = item.dinger;
+  data.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'dingus-card';
 
-      const content = document.createElement('p');
-      const divider = document.createElement('hr');
-      content.innerHTML = item.data;
-      divider.className = "solid"
-      card.appendChild(subject);
-      card.appendChild(dinger);
-      card.appendChild(divider);
-      card.appendChild(content);
-      container.appendChild(card);
-    });
+    const subject = document.createElement('h2');
+    subject.textContent = item.subject;
 
-    document.body.appendChild(container);
-  })
-  .catch(error => {
-    console.error("Error fetching data:", error);
+    const dinger = document.createElement('h1');
+    dinger.textContent = item.dinger;
+
+    const content = document.createElement('p');
+    const divider = document.createElement('hr');
+    divider.className = "solid";
+    content.innerHTML = item.data;
+
+    card.appendChild(subject);
+    card.appendChild(dinger);
+    card.appendChild(divider);
+    card.appendChild(content);
+    container.appendChild(card);
   });
-  
+
+  document.body.appendChild(container);
 }
 
-doTheLoop()
+async function doTheLoop() {
+  try {
+    const response = await fetch(GAS_URL, options);
+    const data = await response.json();
+    const newDataHash = hashData(data);
+
+    if (newDataHash !== lastDataHash) {
+      console.log("🔄 Data has changed, updating UI");
+      lastDataHash = newDataHash;
+      updateDingusCards(data);
+    } else {
+      console.log("✅ No change in data");
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    setTimeout(doTheLoop, 3000); // Loop every 3 seconds
+  }
+}
+
+// Start the loop
+doTheLoop();
