@@ -79,7 +79,7 @@
 
       // Check if response is a string (e.g., error message)
       if (typeof response === "string") {
-        if (response === "User already exists") {
+        if (response.message === "User already exists") {
           errorLabel.innerText = "An error occurred: User already exists.";
         } else {
           errorLabel.innerText = response;
