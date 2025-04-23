@@ -1,5 +1,5 @@
 // Replace this with your GAS web app URL
-const GAS_URL = "https://vercel-dingus-proxy.vercel.app/dings/get";
+const GAS_URL = "https://dingus-api.vercel.app/dings/get";
 const options = {
     method: "POST"
 }
