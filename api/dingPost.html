@@ -23,7 +23,7 @@
       text-align: center;
       margin-bottom: 1rem;
     }
-    input[type="text"], input[type="password"] {
+    input[type="text"], input[type="password"], textarea {
       width: 100%;
       padding: 0.5rem;
       margin: 0.5rem 0;
@@ -57,7 +57,7 @@
   <form id="postForm">
     <input type="text" name="username" id="username" hidden />
     <input type="text" name="DingSubject" placeholder="Ding Title" required />
-    <input type="text" name="DingData" placeholder="Ding body" required />
+    <textarea name="DingData" placeholder="What do you want to put for everyone (for now) to see?" required></textarea>
     <input type="text" name="authToken" id="authToken" hidden />
     <button type="submit">Post</button>
   </form>
