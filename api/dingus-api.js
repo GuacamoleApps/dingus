@@ -14,7 +14,6 @@ async function dingusFetch(endpoint, body = {}, method = "POST") {
   const headers = { "Content-Type": "application/x-www-form-urlencoded" };
   const payload = new URLSearchParams(body);
 
-  // Try Cloudflare first
   try {
     const cloudflareResponse = await fetch(`${CLOUD_FLARE_URL}${endpoint}`, {
       method,
@@ -22,14 +21,14 @@ async function dingusFetch(endpoint, body = {}, method = "POST") {
       body: payload,
     });
 
-    if (!cloudflareResponse.ok) throw new Error("Cloudflare failed");
-
     const data = await parseResponse(cloudflareResponse);
-    console.log("✅ Using Cloudflare");
+
+    if (!cloudflareResponse.ok || data.message?.includes("Exception") || data.message?.includes("Error")) {
+      throw new Error("Cloudflare failed with bad data");
+    }
+
     return data;
   } catch (err) {
-    console.warn("⚠️ Cloudflare failed, switching to Vercel:", err.message);
-
     // Try Vercel fallback
     try {
       const vercelResponse = await fetch(`${VERCEL_FALLBACK_URL}${endpoint}`, {
@@ -38,16 +37,13 @@ async function dingusFetch(endpoint, body = {}, method = "POST") {
         body: payload,
       });
 
-      if (!vercelResponse.ok) throw new Error("Vercel also failed");
-
       const data = await parseResponse(vercelResponse);
-      console.log("✅ Using Vercel fallback");
       return data;
     } catch (vercelErr) {
-      console.error("❌ Both Cloudflare and Vercel failed:", vercelErr.message);
       throw vercelErr;
     }
   }
 }
+
 
 window.dingusFetch = dingusFetch;
