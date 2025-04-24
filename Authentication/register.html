@@ -56,6 +56,7 @@
   <h2>Register Account</h2>
   <form id="loginForm">
     <input type="text" name="username" id="username" placeholder="Username" required />
+    <input type="text" name="realname" id="realname" placeholder="First and Last Name" required />
     <input type="password" name="password" id="password" placeholder="Password" required />
     <button type="submit">Register</button>
   </form>
@@ -71,7 +72,8 @@
 
     const formData = {
       username: document.getElementById("username").value,
-      password: document.getElementById("password").value
+      password: document.getElementById("password").value,
+      realname: document.getElementById("realname").value
     };
 
     try {
