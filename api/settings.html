@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>dingus - settings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #error_label {
+      color: red;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <h2>Account Settings</h2>
+  <form id="settingsForm">
+    <input type="text" id="setting1" name="setting1" placeholder="Setting 1">
+    <input type="text" id="setting2" name="setting2" placeholder="Setting 2">
+    <input type="text" id="authToken" hidden>
+    <input type="text" id="username" hidden>
+    <button type="submit">Save Settings</button>
+    <button type="button" onclick="window.location.href='/dingus/'">Back</button>
+  </form>
+  <p id="error_label"></p>
+</div>
+
+<script src="/dingus/api/dingus-api.js"></script>
+<script>
+  const authToken = getCookie("_28Adm") || "";
+  const username = getCookie("username") || "";
+  document.getElementById("authToken").value = authToken;
+  document.getElementById("username").value = username;
+  const errorLabel = document.getElementById("error_label");
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+
+  async function loadSettings() {
+    try {
+      const res = await dingusFetch("/settings", { username, authToken });
+      if (res && typeof res === "object") {
+        document.getElementById("setting1").value = res.setting1 || "";
+        document.getElementById("setting2").value = res.setting2 || "";
+      }
+    } catch (e) {
+      errorLabel.textContent = "Failed to load settings.";
+    }
+  }
+
+  document.getElementById("settingsForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = {
+      username,
+      authToken,
+      setting1: document.getElementById("setting1").value,
+      setting2: document.getElementById("setting2").value
+    };
+
+    try {
+      const res = await dingusFetch("/settings", data);
+      if (typeof res === "string" && res.includes("Success")) {
+        errorLabel.textContent = "Settings saved!";
+      } else {
+        errorLabel.textContent = "Failed to save settings.";
+      }
+    } catch (err) {
+      errorLabel.textContent = "Error saving settings.";
+    }
+  });
+
+  loadSettings();
+</script>
+</body>
+</html>
