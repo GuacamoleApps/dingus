@@ -102,6 +102,7 @@
         }
       } else if (response.message === "Message.Output.Posted.24hr") {
         errorLabel.innerText = "Ding posted successfully!";
+        window.location.replace("/dingus/")
       } else {
         errorLabel.innerText = response.error || "Failed to post ding.";
       }
