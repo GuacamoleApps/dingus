@@ -83,7 +83,7 @@
 
   async function loadSettings() {
     try {
-      const res = await dingusFetch("/settings", { username, authToken });
+      const res = await dingusFetch("/settings", { "action": "getSettings", username, authToken });
       if (res && typeof res === "object") {
         document.getElementById("setting1").value = res.setting1 || "";
         document.getElementById("setting2").value = res.setting2 || "";
@@ -96,6 +96,7 @@
   document.getElementById("settingsForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = {
+      
       username,
       authToken,
       setting1: document.getElementById("setting1").value,
