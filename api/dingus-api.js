@@ -1,5 +1,5 @@
 const CLOUD_FLARE_URL = "https://dingusproxy.barstaxjolster.workers.dev";
-const VERCEL_FALLBACK_URL = "http://23.241.224.61:2305";
+const VERCEL_FALLBACK_URL = "https://dingus-api.vercel.app";
 
 async function parseResponse(response) {
   const text = await response.text();
